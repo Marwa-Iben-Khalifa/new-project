@@ -1,0 +1,17 @@
+{
+  "name": "balance-ta-livraison",
+  "version": "0.1.0",
+  "description": "Registre de réputation B2B des numéros (COD Tunisie) - MVP légal-by-design",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node src/seed.js",
+    "test": "node test/smoke.mjs",
+    "build:standalone": "node build-standalone.mjs"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
