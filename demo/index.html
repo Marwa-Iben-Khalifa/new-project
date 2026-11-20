@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Balance Ta Livraison — Démo</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--muted:#94a3b8;--text:#e2e8f0;--accent:#38bdf8;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--line:#334155;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:#0b1220;flex-wrap:wrap;gap:8px;}
+.brand{font-weight:700;font-size:18px;}
+.tag{font-size:11px;background:var(--accent);color:#04212e;padding:2px 8px;border-radius:10px;margin-left:6px;}
+.demo-badge{font-size:11px;background:#f59e0b;color:#1a1200;padding:2px 8px;border-radius:10px;}
+.account{display:flex;align-items:center;gap:12px;font-size:14px;flex-wrap:wrap;}
+.credits{color:var(--muted);} .credits b{color:var(--accent);}
+main{max-width:860px;margin:24px auto;padding:0 16px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px;}
+h2,h3{margin-top:0;} .muted,.hint{color:var(--muted);font-size:13px;}
+input,select,textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:#0b1220;color:var(--text);font-size:14px;}
+textarea{resize:vertical;font-family:ui-monospace,monospace;}
+.row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;} .row>*{flex:1;min-width:140px;}
+button{background:var(--accent);color:#04212e;border:none;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;margin-top:8px;}
+button:hover{filter:brightness(1.1);} button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);margin:0;}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{background:var(--card);color:var(--muted);border:1px solid var(--line);}
+.tab.active{background:var(--accent);color:#04212e;}
+.panel{display:none;} .panel.active{display:block;}
+.hidden{display:none !important;}
+.hint code{background:#0b1220;padding:2px 6px;border-radius:5px;color:var(--accent);}
+.legal{color:var(--muted);font-size:12px;text-align:center;margin:24px 0;line-height:1.6;border-top:1px solid var(--line);padding-top:16px;}
+.rep{display:flex;align-items:center;gap:16px;margin-top:16px;padding:16px;border-radius:10px;background:#0b1220;border:1px solid var(--line);}
+.score{font-size:32px;font-weight:800;min-width:70px;text-align:center;}
+.band{padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700;}
+.band.low,.score.low{color:var(--green);} .band.low{background:rgba(34,197,94,.15);}
+.band.medium,.score.medium{color:var(--amber);} .band.medium{background:rgba(245,158,11,.15);}
+.band.high,.score.high{color:var(--red);} .band.high{background:rgba(239,68,68,.15);}
+.band.unknown,.score.unknown{color:var(--muted);} .band.unknown{background:rgba(148,163,184,.12);}
+.rep-facts{font-size:13px;color:var(--muted);}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px;}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);}
+th{color:var(--muted);font-weight:600;}
+.pill{padding:2px 8px;border-radius:12px;font-size:12px;font-weight:700;}
+.pill.low{background:rgba(34,197,94,.15);color:var(--green);}
+.pill.medium{background:rgba(245,158,11,.15);color:var(--amber);}
+.pill.high{background:rgba(239,68,68,.15);color:var(--red);}
+.pill.unknown{background:rgba(148,163,184,.12);color:var(--muted);}
+.notice{padding:10px 12px;border-radius:8px;margin-top:10px;font-size:13px;}
+.notice.ok{background:rgba(34,197,94,.12);color:var(--green);}
+.notice.err{background:rgba(239,68,68,.12);color:var(--red);}
+.summary-grid{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
+.stat{background:#0b1220;border:1px solid var(--line);border-radius:8px;padding:10px 14px;}
+.stat b{display:block;font-size:20px;}
+.demo-hint{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--muted);margin-bottom:14px;}
+.demo-hint b{color:var(--text);}
+/* WhatsApp sim */
+.wa-phone{max-width:420px;margin:0 auto;border:1px solid #222d34;border-radius:16px;overflow:hidden;background:#0b141a;}
+.wa-top{background:#202c33;padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.wa-avatar{width:34px;height:34px;border-radius:50%;background:#00a884;display:flex;align-items:center;justify-content:center;}
+.wa-chat{height:420px;overflow-y:auto;padding:16px;background:#0b141a;}
+.wa-msg{max-width:82%;padding:8px 12px;border-radius:8px;margin:6px 0;white-space:pre-wrap;font-size:14px;line-height:1.4;}
+.wa-in{background:#202c33;} .wa-out{background:#005c4b;margin-left:auto;}
+.wa-bar{display:flex;gap:8px;padding:10px;background:#202c33;}
+.wa-bar input{flex:1;border-radius:20px;background:#2a3942;}
+.wa-bar button{width:42px;border-radius:50%;background:#00a884;margin:0;}
+.wa-who{padding:8px 16px;background:#111b21;font-size:12px;color:#8696a0;display:flex;gap:8px;align-items:center;}
+.wa-who select{width:auto;background:#2a3942;}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">📦 Balance Ta Livraison <span class="tag">Console pro</span> <span class="demo-badge">DÉMO</span></div>
+  <div class="account">
+    <span id="acc-name"></span>
+    <span class="credits">💳 <b id="acc-credits">0</b> crédits</span>
+    <button id="btn-topup" class="ghost">+ Recharger</button>
+    <select id="who-select" class="ghost" style="padding:6px 8px;">
+      <option value="merchant">Marchand</option>
+      <option value="carrier">Transporteur</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div class="demo-hint">
+    <b>Mode démo</b> — tout tourne dans votre navigateur avec des données fictives. Numéros à tester :
+    <code>20111222</code> (risque élevé) · <code>24333444</code> (moyen) · <code>55777888</code> (fiable) ·
+    <code>29888777</code> (livreur) · <code>99000000</code> (inconnu).
+  </div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="single">🔎 Consultation</button>
+    <button class="tab" data-tab="batch">📑 Consultation par lot</button>
+    <button class="tab" data-tab="report">🚩 Signaler</button>
+    <button class="tab" data-tab="whatsapp">📱 Bot WhatsApp</button>
+  </nav>
+
+  <div class="panel active" id="tab-single">
+    <div class="card">
+      <h3>Vérifier un numéro avant expédition</h3>
+      <div class="row">
+        <input id="single-phone" placeholder="Numéro (ex. 20111222)" />
+        <button id="btn-single" style="flex:0 0 auto;">Consulter (1 crédit)</button>
+      </div>
+      <div id="single-result"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="tab-batch">
+    <div class="card">
+      <h3>Consultation par lot</h3>
+      <p class="muted">Collez une liste de numéros (un par ligne). Idéal avant une tournée de livraison. 1 crédit par numéro unique.</p>
+      <textarea id="batch-input" rows="6" placeholder="20111222&#10;24333444&#10;55777888&#10;29888777&#10;99000000"></textarea>
+      <button id="btn-batch">Consulter le lot</button>
+      <div id="batch-summary"></div>
+      <div id="batch-result"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="tab-report">
+    <div class="card">
+      <h3>Signaler un incident</h3>
+      <p class="muted">Un signalement est rattaché à une commande / bon de livraison réel (règle anti-abus).</p>
+      <div class="row">
+        <input id="report-phone" placeholder="Numéro concerné" />
+        <select id="report-type"></select>
+      </div>
+      <div class="row">
+        <input id="report-order" placeholder="Réf. commande (obligatoire)" />
+        <input id="report-note" placeholder="Note (optionnel)" />
+      </div>
+      <button id="btn-report">Enregistrer le signalement</button>
+      <div id="report-result"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="tab-whatsapp">
+    <div class="card">
+      <h3>Simulateur WhatsApp</h3>
+      <p class="muted">Ainsi le commerçant interroge le service depuis WhatsApp : il envoie un numéro, reçoit le score.</p>
+      <div class="wa-phone">
+        <div class="wa-top"><div class="wa-avatar">📦</div><div><div style="font-weight:600">Balance Ta Livraison</div><div style="font-size:12px;color:#8696a0">bot · en ligne</div></div></div>
+        <div class="wa-who">J'écris en tant que :
+          <select id="wa-from">
+            <option value="merchant">Marchand</option>
+            <option value="carrier">Transporteur</option>
+            <option value="unknown">Numéro inconnu</option>
+          </select>
+        </div>
+        <div class="wa-chat" id="wa-chat"></div>
+        <div class="wa-bar"><input id="wa-input" placeholder="Ex : 20111222  ou  AIDE" /><button id="wa-send">➤</button></div>
+      </div>
+      <p class="hint" style="text-align:center">Essaie : <b>AIDE</b> · <b>20111222</b> · <b>SIGNALER 21000000 no_answer CMD-9</b></p>
+    </div>
+  </div>
+
+  <footer class="legal">
+    Résultats fournis sous forme de <b>score de fiabilité</b> et de faits agrégés, à usage professionnel
+    d'aide à la décision. Aucune donnée nominative publique. Droit de contestation et conservation limitée.<br/>
+    Démo de présentation — données fictives.
+  </footer>
+</main>
+
+<script>
+// ---------- Logique métier (portée côté navigateur) ----------
+const REPORT_TYPES={
+  no_answer:{subject:'client',weight:15,label:'Injoignable après sortie livraison'},
+  refused_delivery:{subject:'client',weight:20,label:'Refus du colis au dernier moment'},
+  wrong_address:{subject:'client',weight:10,label:'Adresse erronée / introuvable'},
+  fake_number:{subject:'client',weight:25,label:'Faux numéro / injoignable dès le départ'},
+  delivered_ok:{subject:'client',weight:-12,label:'Livraison réussie et payée'},
+  courier_no_show:{subject:'courier',weight:25,label:"Livreur ne s'est pas présenté"},
+  courier_rude:{subject:'courier',weight:15,label:'Livreur impoli / agressif'},
+  courier_late:{subject:'courier',weight:8,label:'Livreur en retard répété'},
+  courier_reliable:{subject:'courier',weight:-12,label:'Livreur fiable et ponctuel'},
+};
+const RETENTION=12;
+function normalizePhone(input){if(typeof input!=='string')return null;let d=input.replace(/[^\d+]/g,'').replace(/^\+/,'');if(d.startsWith('00'))d=d.slice(2);if(d.startsWith('216'))d=d.slice(3);if(!/^\d{8}$/.test(d))return null;if(!/^[2459]/.test(d))return null;return '+216'+d;}
+function maskPhone(c){const l=c.replace('+216','');return '+216 '+l[0]+'X XXX X'+l.slice(6);}
+function monthsBetween(a,b){return Math.abs(b-a)/(1000*60*60*24*30.4375);}
+function computeReputation(reports,now=Date.now()){
+  const active=reports.filter(r=>r.status==='confirmed'&&monthsBetween(new Date(r.createdAt).getTime(),now)<=RETENTION);
+  let score=100,byType={},last=null;
+  for(const r of active){const def=REPORT_TYPES[r.type];if(!def)continue;const rec=Math.max(0,1-monthsBetween(new Date(r.createdAt).getTime(),now)/RETENTION);score-=def.weight*rec;byType[r.type]=(byType[r.type]||0)+1;const t=new Date(r.createdAt).getTime();if(!last||t>last)last=t;}
+  score=Math.max(0,Math.min(100,Math.round(score)));
+  let band='low';if(score<40)band='high';else if(score<70)band='medium';
+  const known=active.length>0;
+  return{score:known?score:null,band:known?band:'unknown',reportCount:active.length,lastReportAt:last?new Date(last).toISOString():null,known};
+}
+// ---------- État + données démo (en mémoire) ----------
+const accounts={merchant:{name:'Boutique Amine (démo)',type:'merchant',credits:200,wa:'+21650000001'},carrier:{name:'Transporteur Rapide (démo)',type:'carrier',credits:1000,wa:'+21650000002'}};
+let current='merchant';
+const reports=[];
+function addReport(phone,type,monthsAgo,ref){const c=normalizePhone(phone);reports.push({phone:c,type,orderRef:ref,status:'confirmed',createdAt:new Date(Date.now()-monthsAgo*30.4375*864e5).toISOString()});}
+addReport('+21620111222','no_answer',1,'CMD-1001');addReport('+21620111222','refused_delivery',2,'CMD-1042');addReport('+21620111222','fake_number',0.5,'BL-88771');addReport('+21620111222','no_answer',3,'BL-88012');addReport('+21620111222','refused_delivery',4,'CMD-0980');
+addReport('+21624333444','no_answer',1,'CMD-1200');
+addReport('+21655777888','delivered_ok',1,'CMD-1300');addReport('+21655777888','delivered_ok',3,'BL-90001');
+addReport('+21629888777','courier_no_show',1,'BL-5000');addReport('+21629888777','courier_rude',2,'BL-5023');
+function reportsFor(c){return reports.filter(r=>r.phone===c);}
+function reputationFor(c){return{phone:maskPhone(c),...computeReputation(reportsFor(c))};}
+
+// ---------- UI helpers ----------
+const $=id=>document.getElementById(id);
+const bandLabel=b=>({low:'Risque faible',medium:'Risque moyen',high:'Risque élevé',unknown:'Inconnu'}[b]||b);
+function refreshAccount(){const a=accounts[current];$('acc-name').textContent=a.name;$('acc-credits').textContent=a.credits;}
+function repCard(r){const s=r.known?r.score:'—';const facts=r.known?(r.reportCount+' signalement(s) confirmé(s) · dernier : '+(r.lastReportAt?new Date(r.lastReportAt).toLocaleDateString('fr-FR'):'—')):'Aucun historique — numéro inconnu de la base.';return '<div class="rep"><div class="score '+r.band+'">'+s+'</div><div><span class="band '+r.band+'">'+bandLabel(r.band)+'</span><div class="rep-facts" style="margin-top:8px">'+r.phone+'<br/>'+facts+'</div></div></div>';}
+
+$('who-select').onchange=e=>{current=e.target.value;refreshAccount();};
+$('btn-topup').onclick=()=>{accounts[current].credits+=100;refreshAccount();};
+document.querySelectorAll('.tab').forEach(t=>{t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');$('tab-'+t.dataset.tab).classList.add('active');};});
+
+$('btn-single').onclick=()=>{const c=normalizePhone($('single-phone').value.trim());if(!c){$('single-result').innerHTML='<div class="notice err">Numéro invalide (format tunisien attendu)</div>';return;}const a=accounts[current];if(a.credits<1){$('single-result').innerHTML='<div class="notice err">Crédits insuffisants</div>';return;}a.credits-=1;refreshAccount();$('single-result').innerHTML=repCard(reputationFor(c));};
+
+$('btn-batch').onclick=()=>{const raw=$('batch-input').value.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean);if(!raw.length)return;const seen=new Map();let invalid=0;for(const p of raw){const c=normalizePhone(p);if(!c){invalid++;continue;}seen.set(c,true);}const uniq=[...seen.keys()];const a=accounts[current];if(uniq.length>a.credits){$('batch-summary').innerHTML='<div class="notice err">Crédits insuffisants pour ce lot</div>';return;}const results=uniq.map(reputationFor);a.credits-=uniq.length;refreshAccount();const high=results.filter(r=>r.band==='high').length;const flagged=results.filter(r=>r.band==='high'||r.band==='medium').length;$('batch-summary').innerHTML='<div class="summary-grid"><div class="stat"><b>'+uniq.length+'</b>numéros uniques</div><div class="stat"><b style="color:var(--red)">'+high+'</b>risque élevé</div><div class="stat"><b style="color:var(--amber)">'+flagged+'</b>à surveiller</div><div class="stat"><b>'+invalid+'</b>invalides</div><div class="stat"><b>'+uniq.length+'</b>crédits utilisés</div></div>';const rows=results.sort((x,y)=>(x.score??101)-(y.score??101)).map(r=>'<tr><td>'+r.phone+'</td><td>'+(r.known?r.score:'—')+'</td><td><span class="pill '+r.band+'">'+bandLabel(r.band)+'</span></td><td>'+r.reportCount+'</td></tr>').join('');$('batch-result').innerHTML='<table><thead><tr><th>Numéro</th><th>Score</th><th>Évaluation</th><th>Signalements</th></tr></thead><tbody>'+rows+'</tbody></table>';};
+
+$('report-type').innerHTML=Object.entries(REPORT_TYPES).map(([k,v])=>'<option value="'+k+'">'+v.label+' ('+v.subject+')</option>').join('');
+$('btn-report').onclick=()=>{const c=normalizePhone($('report-phone').value.trim());const type=$('report-type').value;const ref=$('report-order').value.trim();if(!c){$('report-result').innerHTML='<div class="notice err">Numéro invalide</div>';return;}if(!ref||ref.length<3){$('report-result').innerHTML='<div class="notice err">Réf. commande requise (anti-abus)</div>';return;}reports.push({phone:c,type,orderRef:ref,status:'confirmed',createdAt:new Date().toISOString()});$('report-result').innerHTML='<div class="notice ok">Signalement enregistré pour '+maskPhone(c)+'. Il est maintenant visible en consultation.</div>';};
+
+// ---------- WhatsApp simulator ----------
+function bandFr(b){return{low:'RISQUE FAIBLE ✅',medium:'RISQUE MOYEN ⚠️',high:'RISQUE ÉLEVÉ ⛔',unknown:'INCONNU'}[b]||b;}
+function waReputation(c){const rep=computeReputation(reportsFor(c));if(!rep.known)return '📇 '+maskPhone(c)+'\nAucun historique — numéro inconnu de la base.';return '📇 '+maskPhone(c)+'\nScore : '+rep.score+'/100 — '+bandFr(rep.band)+'\n'+rep.reportCount+' signalement(s) confirmé(s).';}
+const WA_HELP='🤖 *Balance Ta Livraison*\nEnvoyez :\n• un *numéro* (ex. 20111222) → score\n• *SIGNALER <numéro> <type> <réf>* → signaler\n• *AIDE* → menu\n\nTypes : '+Object.keys(REPORT_TYPES).join(', ');
+function waHandle(whoVal,text){
+  if(whoVal==='unknown')return "👋 Bienvenue sur *Balance Ta Livraison*.\nCe numéro n'est pas encore rattaché à un compte pro. Inscrivez-vous pour obtenir l'accès.";
+  const a=accounts[whoVal];const body=(text||'').trim(),up=body.toUpperCase();
+  if(!body||up==='AIDE'||up==='HELP'||up==='MENU')return WA_HELP+'\n\n💳 Crédits : '+a.credits;
+  if(up.startsWith('SIGNALER')){const [p,type,...ref]=body.split(/\s+/).slice(1);const orderRef=ref.join(' ');const c=normalizePhone(p);if(!c)return '❌ Numéro invalide.';if(!REPORT_TYPES[type])return '❌ Type invalide.';if(!orderRef||orderRef.length<3)return '❌ Réf. commande requise. Ex : SIGNALER 20111222 no_answer CMD-123';reports.push({phone:c,type,orderRef,status:'confirmed',createdAt:new Date().toISOString()});return '✅ Signalement enregistré pour '+maskPhone(c)+' ('+REPORT_TYPES[type].label+').';}
+  const c=normalizePhone(body.replace(/^SCORE\s+/i,''));if(!c)return "Je n'ai pas compris. Envoyez *AIDE*.";if(a.credits<1)return '💳 Crédits insuffisants.';a.credits-=1;if(whoVal===current)refreshAccount();return waReputation(c)+'\n\n(–1 crédit · reste '+a.credits+')';
+}
+function waBubble(t,cls){const d=document.createElement('div');d.className='wa-msg '+cls;d.textContent=t;$('wa-chat').appendChild(d);$('wa-chat').scrollTop=$('wa-chat').scrollHeight;}
+function waSend(){const i=$('wa-input');const t=i.value.trim();if(!t)return;waBubble(t,'wa-out');i.value='';setTimeout(()=>waBubble(waHandle($('wa-from').value,t),'wa-in'),250);}
+$('wa-send').onclick=waSend;$('wa-input').addEventListener('keydown',e=>{if(e.key==='Enter')waSend();});
+waBubble('Envoyez AIDE pour commencer 👋','wa-in');
+
+refreshAccount();
+</script>
+</body>
+</html>
