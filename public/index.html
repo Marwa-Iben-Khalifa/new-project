@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balance Ta Livraison — Console pro</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">📦 Balance Ta Livraison <span class="tag">Console pro</span></div>
+    <div id="account" class="account hidden">
+      <span id="acc-name"></span>
+      <span class="credits">💳 <b id="acc-credits">0</b> crédits</span>
+      <button id="btn-topup" class="ghost">+ Recharger</button>
+      <button id="btn-logout" class="ghost">Quitter</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Login -->
+    <section id="login" class="card">
+      <h2>Connexion professionnelle</h2>
+      <p class="muted">Accès réservé aux e-commerçants et sociétés de livraison. Entrez votre clé API.</p>
+      <input id="apikey" placeholder="Clé API (ex. demo-merchant-key)" />
+      <button id="btn-login">Se connecter</button>
+      <p class="hint">Démo : <code>demo-merchant-key</code> ou <code>demo-carrier-key</code></p>
+      <p class="hint">📱 Tester le bot WhatsApp : <a href="/whatsapp.html">ouvrir le simulateur</a></p>
+    </section>
+
+    <!-- App -->
+    <section id="app" class="hidden">
+      <nav class="tabs">
+        <button class="tab active" data-tab="single">🔎 Consultation</button>
+        <button class="tab" data-tab="batch">📑 Consultation par lot</button>
+        <button class="tab" data-tab="report">🚩 Signaler</button>
+        <button class="tab" data-tab="contest">⚖️ Contester</button>
+      </nav>
+
+      <!-- Single lookup -->
+      <div class="panel active" id="tab-single">
+        <div class="card">
+          <h3>Vérifier un numéro avant expédition</h3>
+          <div class="row">
+            <input id="single-phone" placeholder="Numéro (ex. 20111222)" />
+            <button id="btn-single">Consulter (1 crédit)</button>
+          </div>
+          <div id="single-result"></div>
+        </div>
+      </div>
+
+      <!-- Batch lookup -->
+      <div class="panel" id="tab-batch">
+        <div class="card">
+          <h3>Consultation par lot</h3>
+          <p class="muted">Collez une liste de numéros (un par ligne, ou séparés par virgule). Idéal avant une tournée de livraison. 1 crédit par numéro unique.</p>
+          <textarea id="batch-input" rows="7" placeholder="20111222&#10;24333444&#10;55777888&#10;29888777"></textarea>
+          <button id="btn-batch">Consulter le lot</button>
+          <div id="batch-summary"></div>
+          <div id="batch-result"></div>
+        </div>
+      </div>
+
+      <!-- Report -->
+      <div class="panel" id="tab-report">
+        <div class="card">
+          <h3>Signaler un incident</h3>
+          <p class="muted">Un signalement doit être rattaché à une commande / bon de livraison réel (règle anti-abus).</p>
+          <div class="row">
+            <input id="report-phone" placeholder="Numéro concerné" />
+            <select id="report-type"></select>
+          </div>
+          <div class="row">
+            <input id="report-order" placeholder="Réf. commande / bon de livraison (obligatoire)" />
+            <input id="report-note" placeholder="Note (optionnel)" />
+          </div>
+          <button id="btn-report">Enregistrer le signalement</button>
+          <div id="report-result"></div>
+        </div>
+      </div>
+
+      <!-- Contest -->
+      <div class="panel" id="tab-contest">
+        <div class="card">
+          <h3>Contester des signalements (droit de réponse)</h3>
+          <p class="muted">Toute personne peut demander le réexamen des signalements liés à un numéro.</p>
+          <input id="contest-phone" placeholder="Numéro concerné" />
+          <textarea id="contest-reason" rows="3" placeholder="Motif de la contestation"></textarea>
+          <button id="btn-contest">Envoyer la contestation</button>
+          <div id="contest-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="legal">
+      Résultats fournis sous forme de <b>score de fiabilité</b> et de faits agrégés, à usage
+      professionnel d'aide à la décision. Aucune donnée nominative publique. Numéros stockés
+      de façon hachée. Droit de contestation et durée de conservation limitée.
+    </footer>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
